@@ -153,7 +153,65 @@ alert(
 }
 
 
+async function detectProject(folder){
 
+
+let res =
+await fetch(
+
+"/detect",
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":
+"application/json"
+
+},
+
+body:JSON.stringify({
+
+folder
+
+})
+
+}
+
+);
+
+
+
+let data =
+await res.json();
+
+
+
+if(data.success){
+
+
+alert(
+
+"Framework : "
+
++
+data.data.framework
+
++
+"\nBuild : "
+
++
+(data.data.buildCommand || "-")
+
+);
+
+
+}
+
+
+}
 
 
 
