@@ -12,7 +12,8 @@ const deployRouter =
 require("./routes/deploy");
 const repoRouter =
 require("./routes/repo");
-
+const vercelRouter =
+require("./routes/vercel");
 
 const app = express();
 
@@ -75,6 +76,11 @@ deployRouter
 app.use(
 "/repo",
 repoRouter
+);
+
+app.use(
+"/vercel",
+vercelRouter
 );
 
 app.listen(
