@@ -1,138 +1,304 @@
+*{
+    box-sizing:border-box;
+}
+
+
 body{
 
-margin:0;
+    margin:0;
 
-height:100vh;
+    min-height:100vh;
 
-display:flex;
+    display:flex;
 
-justify-content:center;
+    justify-content:center;
 
-align-items:center;
+    align-items:center;
 
-font-family:Arial;
+    font-family:Arial, sans-serif;
 
-background:#111;
+    background:#111;
 
-color:white;
+    color:white;
 
 }
 
+
+
+
+/* LOGIN CARD */
 
 .card,
 .dashboard{
 
-width:350px;
+    width:350px;
 
-padding:25px;
+    padding:25px;
 
-border-radius:20px;
+    border-radius:20px;
 
-background:#1c1c1c;
+    background:#1c1c1c;
 
-box-shadow:
-0 0 20px #ff00ff;
+    box-shadow:
+    0 0 20px #ff00ff;
 
-text-align:center;
-
-}
-
-
-
-button{
-
-width:90%;
-
-padding:14px;
-
-margin:10px;
-
-border:none;
-
-border-radius:10px;
-
-cursor:pointer;
-
-background:#ff00ff;
-
-color:white;
-
-font-size:16px;
+    text-align:center;
 
 }
 
 
 
-.github-box{
 
-margin-top:20px;
-
-padding:15px;
-
-border-radius:15px;
-
-background:#222;
-
-}
-
-
-
-.menu{
-
-margin-top:20px;
-
-}
+/* DASHBOARD PANEL */
 
 .panel{
 
-width:400px;
+    width:400px;
 
-padding:25px;
+    padding:25px;
 
-background:#151515;
+    background:#151515;
 
-border-radius:20px;
+    border-radius:20px;
 
-box-shadow:0 0 25px #ff00ff;
+    box-shadow:
+    0 0 25px #ff00ff;
+
+}
+
+
+
+
+/* SIDEBAR MODE */
+
+.layout{
+
+    display:flex;
+
+    min-height:100vh;
+
+    width:100%;
 
 }
 
 
 
-.box{
+.sidebar{
 
-margin:15px 0;
+    width:230px;
 
-padding:15px;
+    padding:20px;
 
-background:#222;
+    background:#171717;
 
-border-radius:15px;
+    box-shadow:
+    0 0 20px #ff00ff;
 
 }
 
 
+
+.main{
+
+    flex:1;
+
+    padding:30px;
+
+}
+
+
+
+
+
+/* PROFILE */
+
+.profile{
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+}
+
+
+
+.profile img{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+}
+
+
+
+
+/* BOX */
+
+.box,
+.github-box{
+
+    margin-top:20px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:#222;
+
+}
+
+
+
+
+
+/* BUTTON */
+
+button{
+
+    width:90%;
+
+    padding:14px;
+
+    margin:10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#ff00ff;
+
+    color:white;
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+
+
+button:hover{
+
+    transform:scale(1.05);
+
+    box-shadow:
+    0 0 15px #ff00ff;
+
+}
+
+
+
+
+
+/* MENU */
+
+.menu{
+
+    margin-top:20px;
+
+}
+
+
+
+
+
+/* UPLOAD DROP */
 
 .drop{
 
-padding:30px;
+    padding:30px;
 
-border:2px dashed #ff00ff;
+    border:2px dashed #ff00ff;
 
-border-radius:15px;
+    border-radius:15px;
 
-text-align:center;
+    text-align:center;
 
 }
 
 
 
+
+
+/* INPUT */
+
+input,
 select{
 
-width:90%;
+    width:90%;
 
-padding:12px;
+    padding:12px;
 
-border-radius:10px;
+    margin:10px;
+
+    border-radius:10px;
+
+    border:none;
+
+}
+
+
+
+
+
+/* HISTORY CARD */
+
+.history-item{
+
+    background:#222;
+
+    padding:15px;
+
+    margin-top:10px;
+
+    border-radius:15px;
+
+}
+
+
+
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+
+.layout{
+
+    flex-direction:column;
+
+}
+
+
+
+.sidebar{
+
+    width:100%;
+
+}
+
+
+
+.main{
+
+    padding:15px;
+
+}
+
+
+
+.panel{
+
+    width:95%;
+
+}
+
 
 }
