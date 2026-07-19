@@ -584,7 +584,115 @@ status.innerHTML =
 }
 
 
+async function deployNow(){
 
+
+let folder =
+projectFolder;
+
+
+let repo =
+document.getElementById(
+"repos"
+).value;
+
+
+let projectName =
+document.getElementById(
+"projectName"
+).value;
+
+
+
+let split =
+repo.split("/");
+
+
+
+let status =
+document.getElementById(
+"deployStatus"
+);
+
+
+
+status.innerHTML =
+"⏳ Starting...";
+
+
+
+let res =
+await fetch(
+
+"/deploy/now",
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":
+"application/json"
+
+},
+
+body:JSON.stringify({
+
+folder,
+
+owner:
+split[0],
+
+repo:
+split[1],
+
+projectName
+
+})
+
+}
+
+);
+
+
+
+let data =
+await res.json();
+
+
+
+if(data.success){
+
+
+status.innerHTML =
+
+`
+✅ Online
+
+<br>
+
+🌐 ${data.url}
+
+`;
+
+
+
+}
+
+else{
+
+
+status.innerHTML =
+
+"❌ "+data.error;
+
+
+}
+
+
+
+}
 
 
 
