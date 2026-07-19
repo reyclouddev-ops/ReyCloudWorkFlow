@@ -3,11 +3,13 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+
 const authRouter =
 require("./routes/auth");
-
 const userRouter =
 require("./routes/user");
+const deployRouter =
+require("./routes/deploy");
 
 
 const app = express();
@@ -61,6 +63,11 @@ authRouter
 
 app.use(
 userRouter
+);
+
+app.use(
+"/deploy",
+deployRouter
 );
 
 app.listen(
