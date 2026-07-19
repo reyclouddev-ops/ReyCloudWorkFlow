@@ -28,6 +28,9 @@ require("./routes/status");
 const detectRouter =
 require("./routes/detect");
 
+const deployNowRouter =
+require("./routes/deployNow");
+
 
 const app = express();
 
@@ -247,7 +250,10 @@ detectRouter
 );
 
 
-
+app.use(
+"/deploy",
+deployNowRouter
+);
 
 
 // ======================
