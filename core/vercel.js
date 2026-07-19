@@ -8,9 +8,6 @@ repo
 ){
 
 
-try{
-
-
 const response =
 await axios.post(
 
@@ -19,7 +16,6 @@ await axios.post(
 {
 
 name,
-
 
 gitRepository:{
 
@@ -48,21 +44,37 @@ Authorization:
 
 return response.data;
 
+}
+
+
+
+
+async function getDeployments(
+token
+){
+
+
+const res =
+await axios.get(
+
+"https://api.vercel.com/v6/deployments",
+
+{
+
+headers:{
+
+Authorization:
+`Bearer ${token}`
 
 }
 
-catch(err){
+}
 
-
-console.log(
-err.response?.data || err
 );
 
 
-throw err;
 
-
-}
+return res.data;
 
 
 }
@@ -70,5 +82,9 @@ throw err;
 
 
 module.exports={
-createVercelProject
+
+createVercelProject,
+
+getDeployments
+
 };
