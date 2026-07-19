@@ -1,6 +1,11 @@
 const axios = require("axios");
 
 
+
+// ==========================
+// CREATE VERCEL PROJECT
+// ==========================
+
 async function createVercelProject(
 token,
 name,
@@ -16,6 +21,7 @@ await axios.post(
 {
 
 name,
+
 
 gitRepository:{
 
@@ -49,6 +55,12 @@ return response.data;
 
 
 
+
+
+// ==========================
+// GET ALL DEPLOYMENTS
+// ==========================
+
 async function getDeployments(
 token
 ){
@@ -76,8 +88,51 @@ Authorization:
 
 return res.data;
 
+}
+
+
+
+
+
+
+
+// ==========================
+// GET DEPLOYMENT STATUS
+// ==========================
+
+async function getDeployment(
+token,
+id
+){
+
+
+const res =
+await axios.get(
+
+`https://api.vercel.com/v13/deployments/${id}`,
+
+{
+
+headers:{
+
+Authorization:
+`Bearer ${token}`
 
 }
+
+}
+
+);
+
+
+
+return res.data;
+
+}
+
+
+
+
 
 
 
@@ -85,6 +140,8 @@ module.exports={
 
 createVercelProject,
 
-getDeployments
+getDeployments,
+
+getDeployment
 
 };
