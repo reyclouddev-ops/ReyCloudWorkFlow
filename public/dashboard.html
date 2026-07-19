@@ -4,7 +4,7 @@
 
 <head>
 
-<title>Dashboard</title>
+<title>ReyDeploy Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -14,11 +14,11 @@
 <body>
 
 
-<div class="dashboard">
+<div class="panel">
 
 
 <h1>
-🚀 ReyCloudWorkFlow
+🚀 ReyDeploy
 </h1>
 
 
@@ -30,15 +30,15 @@ Loading...
 </h2>
 
 
-<div class="github-box">
 
+<div class="box">
 
 <h3>
 🐙 GitHub
 </h3>
 
 
-<p id="githubUser">
+<p id="github">
 Checking...
 </p>
 
@@ -52,32 +52,95 @@ Checking...
 
 
 
-<div class="menu">
 
-<button>
+
+<div class="box">
+
+
+<h3>
 📦 Upload Project
-</button>
+</h3>
 
 
-<button>
+<div 
+id="drop"
+class="drop">
+
+
+Tarik File ZIP/RAR/7Z kesini
+
+<br>
+
+atau
+
+<br>
+
+<input 
+type="file"
+id="file">
+
+</div>
+
+
+
+<div id="progress"></div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="box">
+
+
+<h3>
 📂 Repository
-</button>
+</h3>
 
 
-<button>
-☁️ Deploy Vercel
+
+<select id="repos">
+
+<option>
+Loading...
+</option>
+
+</select>
+
+
+<br>
+
+
+<button onclick="createRepo()">
+
+➕ Buat Repo Baru
+
 </button>
 
 
 </div>
 
 
+
+
+
+<button onclick="deploy()">
+
+🚀 Deploy
+
+</button>
+
+
+
 </div>
 
 
 
-<script src="app.js"></script>
-
+<script src="dashboard.js"></script>
 
 </body>
 
