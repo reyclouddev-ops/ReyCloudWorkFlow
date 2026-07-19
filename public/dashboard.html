@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
@@ -14,33 +13,63 @@
 <body>
 
 
-<div class="panel">
+<div class="layout">
 
 
-<h1>
-🚀 ReyDeploy
-</h1>
+<!-- Sidebar -->
 
+<div class="sidebar">
+
+<h2>
+🚀 ReyCloudWorkFlow
+</h2>
+
+
+<button>
+🏠 Dashboard
+</button>
+
+
+<button>
+📦 Deploy
+</button>
+
+
+<button>
+📜 History
+</button>
+
+
+<button>
+⚙️ Settings
+</button>
+
+
+</div>
+
+
+
+
+
+<!-- Main -->
+
+<div class="main">
+
+
+<div class="profile">
+
+
+<img id="avatar">
+
+
+<div>
 
 <h2>
 👋 Hallo,
 <span id="username">
-Loading...
+User
 </span>
 </h2>
-
-
-
-<div class="box">
-
-<h3>
-🐙 GitHub
-</h3>
-
-
-<p id="github">
-Checking...
-</p>
 
 
 <p id="status">
@@ -51,73 +80,52 @@ Checking...
 </div>
 
 
+</div>
 
 
 
-<div class="box">
 
 
-<h3>
+<div class="card">
+
+
+<h2>
 📦 Upload Project
-</h3>
+</h2>
 
-
-<div 
-id="drop"
-class="drop">
-
-
-Tarik File ZIP/RAR/7Z kesini
-
-<br>
-
-atau
-
-<br>
 
 <input 
 type="file"
 id="file">
 
+
+<p id="uploadStatus">
+Belum upload
+</p>
+
+
 </div>
 
 
 
-<div id="progress"></div>
-
-
-</div>
 
 
 
+<div class="card">
 
 
-
-
-<div class="box">
-
-
-<h3>
-📂 Repository
-</h3>
-
+<h2>
+🐙 Repository</h2>
 
 
 <select id="repos">
 
-<option>
-Loading...
-</option>
-
 </select>
-
-
-<br>
 
 
 <button onclick="createRepo()">
 
-➕ Buat Repo Baru
+➕ Create Repository
 
 </button>
 
@@ -126,21 +134,67 @@ Loading...
 
 
 
+
+
+<div class="card">
+
+
+<h2>
+☁️ Deploy Vercel
+</h2>
+
+
+<input 
+id="projectName"
+placeholder="Nama Project">
 
 
 <button onclick="deploy()">
 
-🚀 Deploy
+🚀 Deploy Sekarang
 
 </button>
 
+
+<p id="deployStatus">
+
+</p>
 
 
 </div>
 
 
 
-<script src="dashboard.js"></script>
+
+
+<div class="card">
+
+
+<h2>
+📜 History
+
+</h2>
+
+
+<div id="history">
+
+Loading...
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+<script src="app.js"></script>
 
 </body>
 
