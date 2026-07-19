@@ -25,6 +25,8 @@ require("./routes/vercel");
 const statusRouter =
 require("./routes/status");
 
+const detectRouter =
+require("./routes/detect");
 
 
 const app = express();
@@ -239,7 +241,10 @@ statusRouter
 );
 
 
-
+app.use(
+"/detect",
+detectRouter
+);
 
 
 
