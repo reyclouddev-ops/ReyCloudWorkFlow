@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const authRouter =
+require("./routes/auth");
 
 
 const app = express();
@@ -49,7 +51,10 @@ app.get("/dashboard",(req,res)=>{
 
 });
 
-
+app.use(
+"/auth",
+authRouter
+);
 
 app.listen(
     process.env.PORT,
