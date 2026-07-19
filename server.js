@@ -6,6 +6,9 @@ const session = require("express-session");
 const authRouter =
 require("./routes/auth");
 
+const userRouter =
+require("./routes/user");
+
 
 const app = express();
 
@@ -54,6 +57,10 @@ app.get("/dashboard",(req,res)=>{
 app.use(
 "/auth",
 authRouter
+);
+
+app.use(
+userRouter
 );
 
 app.listen(
