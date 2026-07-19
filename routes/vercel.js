@@ -2,8 +2,8 @@ const express = require("express");
 const fs = require("fs");
 
 const {
-createVercelProject
-}=require("../core/vercel");
+    createVercelProject
+} = require("../core/vercel");
 
 
 const router = express.Router();
@@ -15,7 +15,10 @@ const DB =
 
 
 
+// ==========================
 // Deploy Vercel
+// ==========================
+
 
 router.post(
 "/deploy",
@@ -40,6 +43,8 @@ message:
 
 
 
+
+
 const {
 
 projectName,
@@ -47,6 +52,24 @@ projectName,
 repo
 
 }=req.body;
+
+
+
+
+if(!projectName || !repo){
+
+return res.json({
+
+success:false,
+
+message:
+"Project name dan repo wajib diisi"
+
+});
+
+}
+
+
 
 
 
@@ -66,12 +89,11 @@ repo
 
 
 // =====================
-// Simpan History
+// LOAD HISTORY
 // =====================
 
 
 let history=[];
-
 
 
 if(fs.existsSync(DB)){
@@ -79,7 +101,9 @@ if(fs.existsSync(DB)){
 
 history =
 JSON.parse(
+
 fs.readFileSync(DB)
+
 );
 
 
@@ -87,6 +111,11 @@ fs.readFileSync(DB)
 
 
 
+
+
+// =====================
+// SAVE DEPLOY HISTORY
+// =====================
 
 
 history.push({
@@ -106,16 +135,19 @@ projectName,
 repo,
 
 
+deploymentId:
+result.id || null,
+
+
+
 url:
-result.targets
-?
-result.targets[0]?.url
-:
-null,
+result.url || null,
+
 
 
 status:
-"success",
+"BUILDING",
+
 
 
 date:
@@ -132,12 +164,17 @@ fs.writeFileSync(
 DB,
 
 JSON.stringify(
+
 history,
+
 null,
+
 2
+
 )
 
 );
+
 
 
 
@@ -148,25 +185,42 @@ res.json({
 
 success:true,
 
+
 message:
-"Deploy berhasil",
+"Deploy berhasil 🚀",
+
+
+deploymentId:
+result.id,
+
+
+url:
+result.url || null,
+
 
 data:
-result,
+result
 
-
-history:true
 
 });
+
+
+
 
 
 }
 
 
+
 catch(err){
 
 
-console.log(err);
+console.log(
+
+err.response?.data || err
+
+);
+
 
 
 res.json({
@@ -184,6 +238,7 @@ err.message
 
 
 });
+
 
 
 
