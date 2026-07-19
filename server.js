@@ -10,6 +10,8 @@ const userRouter =
 require("./routes/user");
 const deployRouter =
 require("./routes/deploy");
+const repoRouter =
+require("./routes/repo");
 
 
 const app = express();
@@ -68,6 +70,11 @@ userRouter
 app.use(
 "/deploy",
 deployRouter
+);
+
+app.use(
+"/repo",
+repoRouter
 );
 
 app.listen(
