@@ -1,74 +1,170 @@
 const fs = require("fs");
+const path = require("path");
+
 
 
 function detect(folder){
 
 
-let result="Static HTML";
+let result = {
+
+framework:"Static HTML",
+
+buildCommand:null,
+
+output:null
+
+};
 
 
 
-if(
-fs.existsSync(
-folder+"/package.json"
-)
-
-){
 
 
-const pkg =
+// ======================
+// package.json
+// ======================
+
+
+let pkgFile =
+path.join(
+folder,
+"package.json"
+);
+
+
+
+if(fs.existsSync(pkgFile)){
+
+
+let pkg =
 JSON.parse(
 
 fs.readFileSync(
-folder+"/package.json"
+pkgFile,
+"utf8"
 )
 
 );
 
 
 
-if(pkg.dependencies){
+let dep =
+{
+
+...(pkg.dependencies || {}),
+
+...(pkg.devDependencies || {})
+
+};
 
 
-if(pkg.dependencies.next){
 
-result="Next.js";
+
+
+if(dep.next){
+
+
+result.framework =
+"Next.js";
+
+
+result.buildCommand =
+"npm run build";
+
+
+result.output =
+".next";
+
 
 }
 
-else if(pkg.dependencies.react){
 
-result="React";
+
+else if(dep.react){
+
+
+result.framework =
+"React";
+
+
+result.buildCommand =
+"npm run build";
+
+
+result.output =
+"dist";
+
 
 }
+
+
+
+else if(dep.vue){
+
+
+result.framework =
+"Vue.js";
+
+
+result.buildCommand =
+"npm run build";
+
+
+result.output =
+"dist";
+
+
+}
+
+
 
 else{
 
-result="Node.js";
+
+result.framework =
+"Node.js";
+
+
+result.buildCommand =
+"npm start";
+
 
 }
 
 
-}
-
-
 
 }
 
 
 
-else if(
 
+
+// ======================
+// Python
+// ======================
+
+
+if(
 fs.existsSync(
-folder+"/requirements.txt"
+path.join(
+folder,
+"requirements.txt"
+)
 
 )
 
 ){
 
-result="Python";
+
+result.framework =
+"Python";
+
+
+result.buildCommand =
+"pip install -r requirements.txt";
 
 }
+
 
 
 
@@ -80,5 +176,7 @@ return result;
 
 
 module.exports={
+
 detect
+
 };
