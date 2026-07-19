@@ -1,0 +1,11 @@
+{
+  "remoteName": "origin",
+  "projects": [
+    {
+      "id": "prj_xV6L2EzGytvmquNf7MIYItDbei6J",
+      "name": "reycloud-workflow",
+      "directory": ".",
+      "orgId": "team_bmeXfO4T8hXn1FfrlYJsPGla"
+    }
+  ]
+}
