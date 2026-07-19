@@ -5,11 +5,12 @@ const { v4: uuid } = require("uuid");
 
 const router = express.Router();
 
-
 const DB = "./database/users.json";
 
 
-// Login GitHub
+// =========================
+// Login GitHub OAuth
+// =========================
 
 router.get("/github", (req,res)=>{
 
@@ -30,7 +31,10 @@ res.redirect(url);
 
 
 
-// Callback
+
+// =========================
+// Callback GitHub
+// =========================
 
 router.get("/github/callback", async(req,res)=>{
 
@@ -75,6 +79,7 @@ token.data.access_token;
 
 
 
+
 const user = await axios.get(
 
 "https://api.github.com/user",
@@ -106,7 +111,34 @@ fs.readFileSync(DB)
 
 
 
-let data={
+// cek user sudah ada
+
+let oldUser =
+users.find(
+u=>u.github===githubUser.login
+);
+
+
+
+let data;
+
+
+
+if(oldUser){
+
+
+data=oldUser;
+
+
+data.token=accessToken;
+
+
+}
+
+else{
+
+
+data={
 
 
 id:uuid(),
@@ -128,6 +160,11 @@ accessToken
 
 
 users.push(data);
+
+
+
+}
+
 
 
 
@@ -157,7 +194,9 @@ res.redirect("/dashboard");
 catch(err){
 
 
-console.log(err.response?.data || err);
+console.log(
+err.response?.data || err
+);
 
 
 res.send(
@@ -169,6 +208,181 @@ res.send(
 
 
 });
+
+
+
+
+
+// =========================
+// Login Pakai Token GitHub
+// =========================
+
+
+router.post("/token", async(req,res)=>{
+
+
+try{
+
+
+const token=req.body.token;
+
+
+
+const user =
+await axios.get(
+
+"https://api.github.com/user",
+
+{
+
+headers:{
+
+Authorization:
+`Bearer ${token}`
+
+}
+
+}
+
+);
+
+
+
+const githubUser=user.data;
+
+
+
+let users =
+JSON.parse(
+fs.readFileSync(DB)
+);
+
+
+
+let oldUser =
+users.find(
+u=>u.github===githubUser.login
+);
+
+
+
+let data;
+
+
+
+if(oldUser){
+
+
+data=oldUser;
+
+
+data.token=token;
+
+
+}
+
+else{
+
+
+data={
+
+
+id:uuid(),
+
+github:
+githubUser.login,
+
+
+avatar:
+githubUser.avatar_url,
+
+
+token
+
+
+};
+
+
+users.push(data);
+
+
+}
+
+
+
+
+fs.writeFileSync(
+
+DB,
+
+JSON.stringify(
+users,
+null,
+2
+)
+
+);
+
+
+
+req.session.user=data;
+
+
+
+res.json({
+
+success:true,
+
+username:
+githubUser.login
+
+});
+
+
+}
+
+
+
+catch(err){
+
+
+res.json({
+
+success:false,
+
+message:
+"Token GitHub tidak valid"
+
+});
+
+
+}
+
+
+});
+
+
+
+
+
+// =========================
+// Logout
+// =========================
+
+router.get("/logout",(req,res)=>{
+
+
+req.session.destroy(()=>{
+
+
+res.redirect("/");
+
+
+});
+
+
+});
+
 
 
 
