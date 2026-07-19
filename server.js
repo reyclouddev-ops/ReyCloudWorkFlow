@@ -5,312 +5,123 @@ const cors = require("cors");
 const session = require("express-session");
 const fs = require("fs");
 
-
-
-const authRouter =
-require("./routes/auth");
-
-const userRouter =
-require("./routes/user");
-
-const deployRouter =
-require("./routes/deploy");
-
-const repoRouter =
-require("./routes/repo");
-
-const vercelRouter =
-require("./routes/vercel");
-
-const statusRouter =
-require("./routes/status");
-
-const detectRouter =
-require("./routes/detect");
-
-const deployNowRouter =
-require("./routes/deployNow");
-
+const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user");
+const deployRouter = require("./routes/deploy");
+const repoRouter = require("./routes/repo");
+const vercelRouter = require("./routes/vercel");
+const statusRouter = require("./routes/status");
+const detectRouter = require("./routes/detect");
+const deployNowRouter = require("./routes/deployNow");
 
 const app = express();
-
-
-
 
 // ======================
 // AUTO DATABASE
 // ======================
 
-
-if(!fs.existsSync("./database")){
-
-fs.mkdirSync("./database");
-
+if (!fs.existsSync("./database")) {
+    fs.mkdirSync("./database", { recursive: true });
 }
 
-
-
-if(!fs.existsSync("./database/users.json")){
-
-fs.writeFileSync(
-
-"./database/users.json",
-
-"[]"
-
-);
-
+if (!fs.existsSync("./database/users.json")) {
+    fs.writeFileSync("./database/users.json", "[]");
 }
 
-
-
-if(!fs.existsSync("./database/deploys.json")){
-
-fs.writeFileSync(
-
-"./database/deploys.json",
-
-"[]"
-
-);
-
+if (!fs.existsSync("./database/deploys.json")) {
+    fs.writeFileSync("./database/deploys.json", "[]");
 }
-
-
-
 
 // ======================
 // MIDDLEWARE
 // ======================
 
-
 app.use(cors());
 
+app.use(express.json());
 
-app.use(
-express.json()
-);
-
-
-app.use(
-express.urlencoded({
-
-extended:true
-
-})
-);
-
-
-
-
-
-app.use(session({
-
-secret:
-process.env.SESSION_SECRET || "reydeploy_secret",
-
-
-resave:false,
-
-
-saveUninitialized:false,
-
-
-cookie:{
-
-maxAge:
-1000*60*60*24
-
-}
-
+app.use(express.urlencoded({
+    extended: true
 }));
 
+app.use(session({
+    secret: process.env.SESSION_SECRET || "reydeploy_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}));
 
-
-
-
-
-app.use(
-express.static("public")
-);
-
-
-
-
-
-
+app.use(express.static("public"));
 
 // ======================
 // PAGE
 // ======================
 
-
-app.get("/",(req,res)=>{
-
-
-res.sendFile(
-
-__dirname+
-"/public/index.html"
-
-);
-
-
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/public/index.html");
 });
 
-
-
-
-
-app.get("/dashboard",(req,res)=>{
-
-
-res.sendFile(
-
-__dirname+
-"/public/dashboard.html"
-
-);
-
-
+app.get("/dashboard", (req, res) => {
+    res.sendFile(__dirname + "/public/dashboard.html");
 });
-
-
-
-
-
-
-
 
 // ======================
 // ROUTES
 // ======================
 
+app.use("/auth", authRouter);
 
-app.use(
+app.use(userRouter);
 
-"/auth",
+app.use("/deploy", deployRouter);
 
-authRouter
+app.use("/repo", repoRouter);
 
-);
+app.use("/vercel", vercelRouter);
 
+app.use("/vercel", statusRouter);
 
+app.use("/detect", detectRouter);
 
-app.use(
-
-userRouter
-
-);
-
-
-
-app.use(
-
-"/deploy",
-
-deployRouter
-
-);
-
-
-
-app.use(
-
-"/repo",
-
-repoRouter
-
-);
-
-
-
-app.use(
-
-"/vercel",
-
-vercelRouter
-
-);
-
-
-
-app.use(
-
-"/vercel",
-
-statusRouter
-
-);
-
-
-app.use(
-"/detect",
-detectRouter
-);
-
-
-app.use(
-"/deploy",
-deployNowRouter
-);
-
+app.use("/deploy", deployNowRouter);
 
 // ======================
 // ERROR HANDLER
 // ======================
 
+app.use((err, req, res, next) => {
 
-app.use((err,req,res,next)=>{
+    console.error(err);
 
-
-console.log(err);
-
-
-
-res.status(500).json({
-
-success:false,
-
-message:
-"Server Error"
+    res.status(500).json({
+        success: false,
+        message: err.message || "Server Error"
+    });
 
 });
 
-
-});
-
-
-
-
-
-
-
 // ======================
-// START
+// EXPORT APP
 // ======================
 
+module.exports = app;
 
-const PORT =
-process.env.PORT || 3000;
+// ======================
+// START SERVER
+// ======================
 
+if (!process.env.VERCEL) {
 
+    const PORT = process.env.PORT || 3000;
 
-app.listen(
+    app.listen(PORT, () => {
 
-PORT,
+        console.log(
+            "🚀 ReyDeploy Online : " + PORT
+        );
 
-()=>{
-
-
-console.log(
-
-"🚀 ReyDeploy Online : "+
-PORT
-
-);
-
+    });
 
 }
-
-);
