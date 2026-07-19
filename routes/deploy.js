@@ -6,16 +6,20 @@ const unzipper = require("unzipper");
 const Seven = require("node-7z");
 const unrar = require("node-unrar-js");
 
+const {
+    uploadFile,
+    scanFolder
+} = require("../core/github");
+
 
 const router = express.Router();
-
 
 
 // Upload config
 
 const upload = multer({
 
-dest:"uploads/"
+    dest:"uploads/"
 
 });
 
@@ -23,7 +27,7 @@ dest:"uploads/"
 
 
 // =====================
-// Upload Archive
+// Upload + Extract Archive
 // =====================
 
 
@@ -76,14 +80,9 @@ recursive:true
 
 
 
-
-// =====================
 // ZIP
-// =====================
-
 
 if(ext===".zip"){
-
 
 
 await fs.createReadStream(
@@ -100,19 +99,17 @@ path:output
 .promise();
 
 
-
 }
 
 
 
 
-// =====================
 // 7Z
-// =====================
-
 
 else if(ext===".7z"){
 
+
+await new Promise((resolve,reject)=>{
 
 
 Seven.extract(
@@ -121,10 +118,20 @@ file.path,
 
 output,
 
-{recursive:true}
+{
 
-);
+recursive:true
 
+}
+
+)
+
+.on("end",resolve)
+
+.on("error",reject);
+
+
+});
 
 
 }
@@ -132,13 +139,10 @@ output,
 
 
 
-// =====================
-// RAR
-// =====================
 
+// RAR
 
 else if(ext===".rar"){
-
 
 
 const extractor =
@@ -154,8 +158,8 @@ targetPath:output
 [...extractor.extract()];
 
 
-
 }
+
 
 
 
@@ -179,6 +183,20 @@ message:
 
 
 
+// simpan lokasi extract
+
+req.session.projectFolder =
+output;
+
+
+
+// scan file
+
+const files =
+scanFolder(output);
+
+
+
 res.json({
 
 success:true,
@@ -187,7 +205,12 @@ message:
 "Extract berhasil",
 
 folder:
-output
+output,
+
+totalFile:
+files.length,
+
+files
 
 });
 
@@ -196,10 +219,155 @@ output
 }
 
 
+
 catch(err){
 
 
 console.log(err);
+
+
+res.json({
+
+success:false,
+
+error:
+err.message
+
+});
+
+
+}
+
+
+
+});
+
+
+
+
+
+
+// =====================
+// Push ke GitHub
+// =====================
+
+
+router.post(
+"/push",
+async(req,res)=>{
+
+
+try{
+
+
+if(!req.session.user){
+
+return res.json({
+
+success:false,
+
+message:
+"GitHub belum connect"
+
+});
+
+}
+
+
+
+const {
+
+owner,
+
+repo
+
+}=req.body;
+
+
+
+const folder =
+req.session.projectFolder;
+
+
+
+if(!folder){
+
+return res.json({
+
+success:false,
+
+message:
+"Upload project dulu"
+
+});
+
+}
+
+
+
+
+
+const files =
+scanFolder(folder);
+
+
+
+let uploaded=0;
+
+
+
+for(
+const file of files
+){
+
+
+const result =
+await uploadFile(
+
+req.session.user.token,
+
+owner,
+
+repo,
+
+file.local,
+
+file.github
+
+);
+
+
+
+if(result)
+uploaded++;
+
+
+}
+
+
+
+
+res.json({
+
+success:true,
+
+message:
+"Push berhasil",
+
+uploaded,
+
+total:
+files.length
+
+});
+
+
+
+
+}
+
+
+catch(err){
 
 
 res.json({
