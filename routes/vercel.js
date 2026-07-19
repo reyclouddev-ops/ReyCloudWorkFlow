@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 
 const {
 createVercelProject
@@ -8,9 +9,13 @@ createVercelProject
 const router = express.Router();
 
 
+const DB =
+"./database/deploys.json";
+
+
+
 
 // Deploy Vercel
-
 
 router.post(
 "/deploy",
@@ -60,6 +65,85 @@ repo
 
 
 
+// =====================
+// Simpan History
+// =====================
+
+
+let history=[];
+
+
+
+if(fs.existsSync(DB)){
+
+
+history =
+JSON.parse(
+fs.readFileSync(DB)
+);
+
+
+}
+
+
+
+
+
+history.push({
+
+id:
+Date.now(),
+
+
+user:
+req.session.user.github,
+
+
+project:
+projectName,
+
+
+repo,
+
+
+url:
+result.targets
+?
+result.targets[0]?.url
+:
+null,
+
+
+status:
+"success",
+
+
+date:
+new Date()
+
+});
+
+
+
+
+
+fs.writeFileSync(
+
+DB,
+
+JSON.stringify(
+history,
+null,
+2
+)
+
+);
+
+
+
+
+
+
 res.json({
 
 success:true,
@@ -68,7 +152,10 @@ message:
 "Deploy berhasil",
 
 data:
-result
+result,
+
+
+history:true
 
 });
 
@@ -77,6 +164,9 @@ result
 
 
 catch(err){
+
+
+console.log(err);
 
 
 res.json({
