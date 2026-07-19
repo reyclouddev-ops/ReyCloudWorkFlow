@@ -3,7 +3,7 @@
 
 <head>
 
-<title>ReyDeploy Dashboard</title>
+<title>ReyCloudWorkFlow Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -56,6 +56,9 @@
 <div class="main">
 
 
+
+<!-- PROFILE -->
+
 <div class="profile">
 
 
@@ -72,6 +75,11 @@ User
 </h2>
 
 
+<p id="githubUser">
+Github
+</p>
+
+
 <p id="status">
 Checking...
 </p>
@@ -86,6 +94,10 @@ Checking...
 
 
 
+
+
+<!-- UPLOAD -->
+
 <div class="card">
 
 
@@ -94,13 +106,23 @@ Checking...
 </h2>
 
 
-<input 
+<input
+
 type="file"
-id="file">
+
+id="file"
+
+accept=".zip,.rar,.7z"
+
+onchange="uploadProject()"
+
+>
 
 
 <p id="uploadStatus">
+
 Belum upload
+
 </p>
 
 
@@ -111,16 +133,29 @@ Belum upload
 
 
 
+
+
+<!-- REPOSITORY -->
+
 <div class="card">
 
 
 <h2>
-🐙 Repository</h2>
+🐙 Repository
+</h2>
+
 
 
 <select id="repos">
 
+<option>
+Loading...
+</option>
+
+
 </select>
+
+
 
 
 <button onclick="createRepo()">
@@ -136,29 +171,28 @@ Belum upload
 
 
 
+
+
+
+<!-- PROJECT -->
+
 <div class="card">
 
 
 <h2>
-☁️ Deploy Vercel
+⚙️ Project Setting
 </h2>
 
 
-<input 
+
+<input
+
 id="projectName"
-placeholder="Nama Project">
 
+placeholder="Nama Project"
 
-<button onclick="deploy()">
+>
 
-🚀 Deploy Sekarang
-
-</button>
-
-
-<p id="deployStatus">
-
-</p>
 
 
 </div>
@@ -167,13 +201,56 @@ placeholder="Nama Project">
 
 
 
+
+
+
+<!-- DEPLOY -->
+
 <div class="card">
 
 
 <h2>
-📜 History
+☁️ Deploy Vercel
+</h2>
+
+
+
+<button onclick="deployNow()">
+
+🚀 DEPLOY NOW
+
+</button>
+
+
+
+
+<p id="deployStatus">
+
+Ready
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- HISTORY -->
+
+<div class="card">
+
+
+<h2>
+📜 Deployment History
 
 </h2>
+
 
 
 <div id="history">
@@ -183,19 +260,25 @@ Loading...
 </div>
 
 
-</div>
-
-
 
 </div>
 
 
+
+
+
 </div>
+
+</div>
+
+
 
 
 
 <script src="app.js"></script>
 
+
 </body>
+
 
 </html>
