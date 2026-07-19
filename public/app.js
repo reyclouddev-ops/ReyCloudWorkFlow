@@ -45,13 +45,9 @@ data.github || "Belum Connect";
 if(status)
 status.innerHTML =
 data.connected
-
 ?
-
 "🟢 Github Connected"
-
 :
-
 "🔴 Github Not Connected";
 
 
@@ -141,19 +137,15 @@ await res.json();
 
 if(data.success){
 
-
 location.href="/dashboard";
-
 
 }
 
 else{
 
-
 alert(
 "Token GitHub salah"
 );
-
 
 }
 
@@ -175,9 +167,7 @@ async function loadRepo(){
 
 
 let select =
-document.getElementById(
-"repos"
-);
+document.getElementById("repos");
 
 
 
@@ -190,9 +180,7 @@ try{
 
 
 let res =
-await fetch(
-"/repo/repos"
-);
+await fetch("/repo/repos");
 
 
 let data =
@@ -211,23 +199,18 @@ let option =
 document.createElement("option");
 
 
-
 option.value =
 repo.owner+"/"+repo.name;
-
 
 
 option.innerHTML =
 repo.name;
 
 
-
 select.appendChild(option);
 
 
-
 });
-
 
 
 }
@@ -267,6 +250,7 @@ return;
 
 
 
+let res =
 await fetch(
 
 "/repo/create",
@@ -294,8 +278,20 @@ name
 
 
 
+let data =
+await res.json();
+
+
+
+if(data.success){
+
+alert(
+"Repository dibuat 🚀"
+);
+
 loadRepo();
 
+}
 
 }
 
@@ -311,20 +307,25 @@ loadRepo();
 // ==========================
 
 
+let projectFolder=null;
+
+
+
 async function uploadProject(){
 
 
-let file =
-document.getElementById(
-"file"
-);
+let input =
+document.getElementById("file");
 
 
 
-if(!file.files[0])
+if(!input.files[0]){
+
 return alert(
 "Pilih file dulu"
 );
+
+}
 
 
 
@@ -334,8 +335,19 @@ new FormData();
 
 
 form.append(
+
 "file",
-file.files[0]
+
+input.files[0]
+
+);
+
+
+
+
+let status =
+document.getElementById(
+"uploadStatus"
 );
 
 
@@ -365,16 +377,22 @@ await res.json();
 if(data.success){
 
 
-alert(
+projectFolder =
+data.folder;
 
-"Extract berhasil : "
 
-+
-data.totalFile
-+
-" file"
 
-);
+if(status){
+
+status.innerHTML =
+
+"✅ Extract "+
+
+data.totalFile+
+
+" File";
+
+}
 
 
 }
@@ -398,8 +416,9 @@ data.message
 
 
 
+
 // ==========================
-// DEPLOY
+// DEPLOY VERCEL
 // ==========================
 
 
@@ -409,14 +428,33 @@ async function deploy(){
 let repo =
 document.getElementById(
 "repos"
-).value;
+);
 
 
 
-let projectName =
+let project =
 document.getElementById(
 "projectName"
-).value;
+);
+
+
+
+if(!repo || !project)
+return;
+
+
+
+let status =
+document.getElementById(
+"deployStatus"
+);
+
+
+
+if(status)
+status.innerHTML =
+"⏳ Deploying...";
+
 
 
 
@@ -438,9 +476,13 @@ headers:{
 
 body:JSON.stringify({
 
-projectName,
+projectName:
+project.value,
 
-repo
+
+repo:
+repo.value
+
 
 })
 
@@ -458,9 +500,13 @@ await res.json();
 if(data.success){
 
 
-alert(
-"Deploy berhasil 🚀"
-);
+if(status)
+
+status.innerHTML =
+"✅ Deploy berhasil 🚀";
+
+
+loadHistory();
 
 
 }
@@ -468,16 +514,17 @@ alert(
 else{
 
 
-alert(
-data.message ||
-"Deploy gagal"
-);
+if(status)
+
+status.innerHTML =
+"❌ Deploy gagal";
 
 
 }
 
 
 }
+
 
 
 
@@ -486,7 +533,85 @@ data.message ||
 
 
 // ==========================
-// START
+// LOAD HISTORY
+// ==========================
+
+
+async function loadHistory(){
+
+
+let box =
+document.getElementById(
+"history"
+);
+
+
+
+if(!box)
+return;
+
+
+
+let res =
+await fetch(
+"/history"
+);
+
+
+
+let data =
+await res.json();
+
+
+
+box.innerHTML="";
+
+
+
+data.deploys.forEach(item=>{
+
+
+box.innerHTML += `
+
+<div class="history-item">
+
+<h3>
+${item.project}
+</h3>
+
+<p>
+🐙 ${item.repo}
+</p>
+
+<p>
+Status:
+${item.status}
+</p>
+
+<p>
+🌐 ${item.url || "-"}
+</p>
+
+</div>
+
+`;
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+// ==========================
+// START DASHBOARD
 // ==========================
 
 
@@ -499,5 +624,7 @@ location.pathname.includes(
 loadUser();
 
 loadRepo();
+
+loadHistory();
 
 }
