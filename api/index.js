@@ -1,3 +1,5 @@
-const app = require("../server");
+app.use(express.static("public"));
 
-module.exports = app;
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/public/index.html");
+});
