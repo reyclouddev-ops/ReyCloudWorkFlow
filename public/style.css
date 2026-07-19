@@ -82,3 +82,57 @@ background:#222;
 margin-top:20px;
 
 }
+
+.panel{
+
+width:400px;
+
+padding:25px;
+
+background:#151515;
+
+border-radius:20px;
+
+box-shadow:0 0 25px #ff00ff;
+
+}
+
+
+
+.box{
+
+margin:15px 0;
+
+padding:15px;
+
+background:#222;
+
+border-radius:15px;
+
+}
+
+
+
+.drop{
+
+padding:30px;
+
+border:2px dashed #ff00ff;
+
+border-radius:15px;
+
+text-align:center;
+
+}
+
+
+
+select{
+
+width:90%;
+
+padding:12px;
+
+border-radius:10px;
+
+}
